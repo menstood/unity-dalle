@@ -7,20 +7,21 @@ using OpenAI.Models;
 using OpenAI.Images;
 using UnityEngine.Assertions;
 
-public class ImageGenerator : EditorWindow
+public class ImageEditor : EditorWindow
 {
     //OPEN AI
     private string previewImagePath;
     private string prompt;
-
+    private Texture2D selectedImage;
+    private Texture2D maskImage;
     //EDITOR WINDOW
     private Texture2D previewImage;
     private bool isLoading;
     private float previewSize = 100;
-    [MenuItem("Tools/Generative Image Generator")]
+    [MenuItem("Tools/Generative Image Editor")]
     public static void ShowWindow()
     {
-        GetWindow<ImageGenerator>("Generative Image Generator");
+        GetWindow<ImageEditor>("Generative Image Edtior");
     }
     private void SetPreviewImage(string path)
     {
@@ -47,10 +48,10 @@ public class ImageGenerator : EditorWindow
 
     private void SaveTexture()
     {
-        string path = "Assets/GeneratedImage";
+        string path = "Assets/EditedImage";
         if (!AssetDatabase.IsValidFolder(path))
         {
-            AssetDatabase.CreateFolder("Assets", "GeneratedImage");
+            AssetDatabase.CreateFolder("Assets", "EditedImage");
         }
         string fileName = System.IO.Path.GetFileName(previewImagePath);
         string destFile = System.IO.Path.Combine(path, fileName);
@@ -59,14 +60,24 @@ public class ImageGenerator : EditorWindow
     }
     private void OnGUI()
     {
-        GUILayout.Label("Image Generator", EditorStyles.boldLabel);
+        GUILayout.Label("Image Editor", EditorStyles.boldLabel);
         GUILayout.Label("Prompt");
         prompt = GUILayout.TextField(prompt);
-        if (GUILayout.Button("Generate Image"))
+        GUILayout.Label("Select an Image:");
+        selectedImage = (Texture2D)EditorGUILayout.ObjectField(selectedImage, typeof(Texture2D), false);
+        GUILayout.Label("Select a Mask Image:");
+        maskImage = (Texture2D)EditorGUILayout.ObjectField(maskImage, typeof(Texture2D), false);
+        if (selectedImage != null)
         {
-            Debug.Log("Generate Image");
-            GenerateImage();
+            GUILayout.Label("Selected Image:");
+            GUILayout.Label(selectedImage, GUILayout.Width(100), GUILayout.Height(100));
+            if (GUILayout.Button("Generate Image"))
+            {
+                Debug.Log("Generate Image");
+                GenerateImage();
+            }
         }
+
         if (previewImage != null)
         {
             GUILayout.Label("Preview Image");
