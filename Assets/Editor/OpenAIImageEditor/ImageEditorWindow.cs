@@ -94,7 +94,7 @@ public class ImageEditor : EditorWindow
         }
         if (isLoading)
         {
-            EditorGUI.ProgressBar(GUILayoutUtility.GetRect(position.width - previewSize - 40, 20), 0.9f, "Loading...");
+            EditorGUI.ProgressBar(GUILayoutUtility.GetRect(position.width - previewSize - 40, 20), 0.9f, "Generating...");
         }
     }
 }
