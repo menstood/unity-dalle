@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using OpenAI;
@@ -7,20 +5,19 @@ using OpenAI.Models;
 using OpenAI.Images;
 using UnityEngine.Assertions;
 
-public class ImageGenerator : EditorWindow
+public class ImageVariant : EditorWindow
 {
     //OPEN AI
     private string previewImagePath;
-    private string prompt;
-
+    private Texture2D selectedImage;
     //EDITOR WINDOW
     private Texture2D previewImage;
     private bool isLoading;
     private float previewSize = 100;
-    [MenuItem("Tools/Generative Image Generator")]
+    [MenuItem("Tools/Generative Image Variant")]
     public static void ShowWindow()
     {
-        GetWindow<ImageGenerator>("Generative Image Generator");
+        GetWindow<ImageVariant>("Generative Image Variant");
     }
     private void SetPreviewImage(string path)
     {
@@ -31,8 +28,9 @@ public class ImageGenerator : EditorWindow
     async void GenerateImage()
     {
         var api = new OpenAIClient();
-        var request = new ImageGenerationRequest(prompt, Model.DallE_2);
-        var results = api.ImagesEndPoint.GenerateImageAsync(request);
+        var imagePath = AssetDatabase.GetAssetPath(selectedImage);
+        var request = new ImageVariationRequest(imagePath);
+        var results = api.ImagesEndPoint.CreateImageVariationAsync(request);
         isLoading = true;
         await results;
         foreach (var (path, texture) in results.Result)
@@ -42,15 +40,14 @@ public class ImageGenerator : EditorWindow
             Assert.IsNotNull(texture);
             isLoading = false;
         }
-
     }
 
     private void SaveTexture()
     {
-        string path = "Assets/GeneratedImage/Created";
+        string path = "Assets/GeneratedImage/Variants";
         if (!AssetDatabase.IsValidFolder(path))
         {
-            AssetDatabase.CreateFolder("Assets/GeneratedImage", "Created");
+            AssetDatabase.CreateFolder("Assets/GeneratedImage", "Variants");
         }
         string fileName = System.IO.Path.GetFileName(previewImagePath);
         string destFile = System.IO.Path.Combine(path, fileName);
@@ -59,14 +56,20 @@ public class ImageGenerator : EditorWindow
     }
     private void OnGUI()
     {
-        GUILayout.Label("Image Generator", EditorStyles.boldLabel);
-        GUILayout.Label("Prompt");
-        prompt = GUILayout.TextField(prompt);
-        if (GUILayout.Button("Generate Image"))
+        GUILayout.Label("Image Editor", EditorStyles.boldLabel);
+        GUILayout.Label("Select an Image:");
+        selectedImage = (Texture2D)EditorGUILayout.ObjectField(selectedImage, typeof(Texture2D), false);
+        if (selectedImage != null)
         {
-            Debug.Log("Generate Image");
-            GenerateImage();
+            GUILayout.Label("Selected Image:");
+            GUILayout.Label(selectedImage, GUILayout.Width(100), GUILayout.Height(100));
+            if (GUILayout.Button("Generate Image"))
+            {
+                Debug.Log("Generate Image");
+                GenerateImage();
+            }
         }
+
         if (previewImage != null)
         {
             GUILayout.Label("Preview Image");

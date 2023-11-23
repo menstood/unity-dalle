@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using OpenAI;
@@ -32,8 +30,8 @@ public class ImageEditor : EditorWindow
     async void GenerateImage()
     {
         var api = new OpenAIClient();
-        var request = new ImageGenerationRequest(prompt, Model.DallE_2);
-        var results = api.ImagesEndPoint.GenerateImageAsync(request);
+        var request = new ImageEditRequest(selectedImage, maskImage, prompt);
+        var results = api.ImagesEndPoint.CreateImageEditAsync(request);
         isLoading = true;
         await results;
         foreach (var (path, texture) in results.Result)
@@ -48,10 +46,10 @@ public class ImageEditor : EditorWindow
 
     private void SaveTexture()
     {
-        string path = "Assets/EditedImage";
+        string path = "Assets/GeneratedImage/Edtied";
         if (!AssetDatabase.IsValidFolder(path))
         {
-            AssetDatabase.CreateFolder("Assets", "EditedImage");
+            AssetDatabase.CreateFolder("Assets/GeneratedImage", "Edtied");
         }
         string fileName = System.IO.Path.GetFileName(previewImagePath);
         string destFile = System.IO.Path.Combine(path, fileName);
