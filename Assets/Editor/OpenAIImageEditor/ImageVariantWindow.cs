@@ -8,7 +8,6 @@ using UnityEngine.Assertions;
 public class ImageVariant : EditorWindow
 {
     //OPEN AI
-    private string previewImagePath;
     private Texture2D selectedImage;
     //EDITOR WINDOW
     private Texture2D previewImage;
@@ -19,10 +18,9 @@ public class ImageVariant : EditorWindow
     {
         GetWindow<ImageVariant>("Generative Image Variant");
     }
-    private void SetPreviewImage(string path)
+    private void SetPreviewImage(Texture2D texture)
     {
-        previewImage = new Texture2D(1, 1);
-        previewImage.LoadImage(System.IO.File.ReadAllBytes(path));
+        previewImage = texture;
     }
 
     async void GenerateImage()
@@ -33,10 +31,9 @@ public class ImageVariant : EditorWindow
         var results = api.ImagesEndPoint.CreateImageVariationAsync(request);
         isLoading = true;
         await results;
-        foreach (var (path, texture) in results.Result)
+        foreach (var (_, texture) in results.Result)
         {
-            previewImagePath = path;
-            SetPreviewImage(path);
+            SetPreviewImage(texture);
             Assert.IsNotNull(texture);
             isLoading = false;
         }
@@ -49,11 +46,13 @@ public class ImageVariant : EditorWindow
         {
             AssetDatabase.CreateFolder("Assets/GeneratedImage", "Variants");
         }
-        string fileName = System.IO.Path.GetFileName(previewImagePath);
-        string destFile = System.IO.Path.Combine(path, fileName);
-        System.IO.File.Copy(previewImagePath, destFile, true);
+        string fileName = previewImage.name + ".png";
+        //Texture into file
+        byte[] bytes = previewImage.EncodeToPNG();
+        System.IO.File.WriteAllBytes(System.IO.Path.Combine(path, fileName), bytes);
         AssetDatabase.Refresh();
     }
+    
     private void OnGUI()
     {
         GUILayout.Label("Image Editor", EditorStyles.boldLabel);
