@@ -30,7 +30,11 @@ public class ImageEditor : EditorWindow
     async void GenerateImage()
     {
         var api = new OpenAIClient();
-        var request = new ImageEditRequest(selectedImage, maskImage, prompt);
+
+        var imagePath = AssetDatabase.GetAssetPath(selectedImage);
+        var maskePath = AssetDatabase.GetAssetPath(maskImage);
+        Debug.Log("Image Path: " + imagePath);
+        var request = new ImageEditRequest(imagePath, maskePath, prompt);
         var results = api.ImagesEndPoint.CreateImageEditAsync(request);
         isLoading = true;
         await results;
