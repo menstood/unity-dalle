@@ -15,7 +15,7 @@ public class ImageGenerator : EditorWindow
     private Texture2D previewImage;
     private bool isLoading;
     private float previewSize = 100;
-    [MenuItem("Tools/Generative Image Generator")]
+    [MenuItem("Tools/Generative Image Generator", priority = 0)]
     public static void ShowWindow()
     {
         GetWindow<ImageGenerator>("Generative Image Generator");
