@@ -23,19 +23,29 @@ Navigate to menu **Tools/Dall-E** you will see 3 main feature of Dall-E (Generat
 
 #### Generations
 Generate 1024x1024 images base on prompt that user input.
+
+
 **Useful Prompt**
 
 For seamless tile texture for surface.
-    `Seamless : Can you make seamless tiled patterns for {i}`
+
+
+     Can you make seamless tiled patterns for {i}
 	
 If above doesn't work.
-    `seamless for realistic {i} top view square`
+
+
+    Seamless realistic {i} top view square
 
 Simple Texture for surface.
-    `{i} texture for video game`
+
+
+    {i} texture for video game
 
 Texture for particle.
-    `{i} texture for particle solid black background`
+
+
+    {i} texture for particle solid black background
 
 #### Edits
 Edit your image base on the mask image and prompt.
@@ -45,13 +55,18 @@ Mask indicating which areas should be replaced. The transparent areas of the mas
 
 For more information please [visit](http://https://platform.openai.com/docs/guides/images/edits-dall-e-2-only "visit")
 
+
 **Useful Prompt**
 
 Fill seam of texture.
-    `Fill {i} texture`
+
+
+    Fill {i} texture
 
 Change some part of texture.
-    `{color} {something} with {something}`
+
+
+    {color} {something} with {something}
 
 #### Variations
 Generate 1024x1024 variation of a given image without prompt.
