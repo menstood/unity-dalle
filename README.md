@@ -21,22 +21,23 @@ A Dall-E for Unity Editor but also included full OpenAI api from the base repo a
 ### How to use
 Navigate to menu **Tools/Dall-E** you will see 3 main feature of Dall-E (Generations, Edits, Variations)
 
-###### Generations
+#### Generations
 Generate 1024x1024 images base on prompt that user input.
 **Useful Prompt**
 
 For seamless tile texture for surface.
-`Seamless : Can you make seamless tiled patterns for {i}`
-
-`seamless for realistic {i} top view square`
+    `Seamless : Can you make seamless tiled patterns for {i}`
+	
+If above doesn't work.
+    `seamless for realistic {i} top view square`
 
 Simple Texture for surface.
-`{i} texture for video game`
+    `{i} texture for video game`
 
 Texture for particle.
-`{i} texture for particle solid black background`
+    `{i} texture for particle solid black background`
 
-###### Edits
+#### Edits
 Edit your image base on the mask image and prompt.
 input for this feature is image and mask.
 
@@ -47,12 +48,12 @@ For more information please [visit](http://https://platform.openai.com/docs/guid
 **Useful Prompt**
 
 Fill seam of texture.
-`Fill {i} texture`
+    `Fill {i} texture`
 
 Change some part of texture.
-`{color} {something} with {something}`
+    `{color} {something} with {something}`
 
-###### Variations
+#### Variations
 Generate 1024x1024 variation of a given image without prompt.
 
 
