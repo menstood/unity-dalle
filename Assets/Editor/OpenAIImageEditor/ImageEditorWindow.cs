@@ -9,10 +9,10 @@ public class ImageEditor : DallEBaseEditor
     private Texture2D selectedImage;
     private Texture2D maskImage;
     //EDITOR WINDOW
-    [MenuItem("Tools/Generative Image Editor")]
+    [MenuItem("Tools/Dall-E/Edits")]
     public static void ShowWindow()
     {
-        GetWindow<ImageEditor>("Generative Image Edtior");
+        GetWindow<ImageEditor>("Dall-E Image Edits");
     }
 
     async void GenerateImage()

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using OpenAI;
-using OpenAI.Models;
 using OpenAI.Images;
 using UnityEngine.Assertions;
 
@@ -9,10 +8,10 @@ public class ImageVariant : DallEBaseEditor
 {
     private Texture2D selectedImage;
 
-    [MenuItem("Tools/Generative Image Variant")]
+    [MenuItem("Tools/Dall-E/Variations")]
     public static void ShowWindow()
     {
-        GetWindow<ImageVariant>("Generative Image Variant");
+        GetWindow<ImageVariant>("DallE Image Variations");
     }
 
     async void GenerateImage()

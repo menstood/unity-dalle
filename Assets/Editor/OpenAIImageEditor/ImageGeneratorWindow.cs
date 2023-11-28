@@ -9,10 +9,10 @@ using UnityEngine.Assertions;
 public class ImageGenerator : DallEBaseEditor
 {
 
-    [MenuItem("Tools/Generative Image Generator")]
+    [MenuItem("Tools/Dall-E/Generations", priority = 1)]
     public static void ShowWindow()
     {
-        GetWindow<ImageGenerator>("Generative Image Generator");
+        GetWindow<ImageGenerator>("Dall-E Image Generations");
     }
 
     async void GenerateImage()
