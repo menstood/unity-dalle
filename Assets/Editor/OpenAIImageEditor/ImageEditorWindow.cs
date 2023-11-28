@@ -4,24 +4,15 @@ using OpenAI;
 using OpenAI.Images;
 using UnityEngine.Assertions;
 
-public class ImageEditor : EditorWindow
+public class ImageEditor : DallEBaseEditor
 {
-    //OPEN AI
-    private string prompt;
     private Texture2D selectedImage;
     private Texture2D maskImage;
     //EDITOR WINDOW
-    private Texture2D previewImage;
-    private bool isLoading;
-    private float previewSize = 100;
     [MenuItem("Tools/Generative Image Editor")]
     public static void ShowWindow()
     {
         GetWindow<ImageEditor>("Generative Image Edtior");
-    }
-    private void SetPreviewImage(Texture2D texture)
-    {
-        previewImage = texture;
     }
 
     async void GenerateImage()
@@ -37,28 +28,11 @@ public class ImageEditor : EditorWindow
             Assert.IsNotNull(texture);
             isLoading = false;
         }
-
     }
 
-    private void SaveTexture()
+    protected override void OnGUI()
     {
-        string path = "Assets/GeneratedImage/Edtied";
-        if (!AssetDatabase.IsValidFolder(path))
-        {
-            AssetDatabase.CreateFolder("Assets/GeneratedImage", "Edtied");
-        }
-        string fileName = previewImage.name + ".png";
-        //Texture into file
-        byte[] bytes = previewImage.EncodeToPNG();
-        System.IO.File.WriteAllBytes(System.IO.Path.Combine(path, fileName), bytes);
-        AssetDatabase.Refresh();
-    }
-    
-    private void OnGUI()
-    {
-        GUILayout.Label("Image Editor", EditorStyles.boldLabel);
-        GUILayout.Label("Prompt");
-        prompt = GUILayout.TextField(prompt);
+        base.OnGUI();
         GUILayout.Label("Select an Image:");
         selectedImage = (Texture2D)EditorGUILayout.ObjectField(selectedImage, typeof(Texture2D), false);
         GUILayout.Label("Select a Mask Image:");
@@ -69,7 +43,6 @@ public class ImageEditor : EditorWindow
             GUILayout.Label(selectedImage, GUILayout.Width(100), GUILayout.Height(100));
             if (GUILayout.Button("Generate Image"))
             {
-                Debug.Log("Generate Image");
                 GenerateImage();
             }
         }
@@ -78,16 +51,11 @@ public class ImageEditor : EditorWindow
         {
             GUILayout.Label("Preview Image");
             Rect previewRect = GUILayoutUtility.GetRect(previewSize, previewSize);
-            float xOffset = (previewRect.width - previewSize) / 2f;
-            float yOffset = (previewRect.height - previewSize) / 2f;
-            previewRect.x += xOffset;
-            previewRect.y += yOffset;
-            previewRect.width = previewSize;
-            previewRect.height = previewSize;
+            previewRect = SetPreviewSize(previewSize, previewRect);
             EditorGUI.DrawPreviewTexture(previewRect, previewImage);
             if (GUILayout.Button("Save Image"))
             {
-                SaveTexture();
+                SaveTexture("EditedImage");
             }
         }
         if (isLoading)
